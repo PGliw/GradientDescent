@@ -100,10 +100,10 @@ def stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta, mini
     number_of_batches = int(y_train.shape[0] / mini_batch)
     # split training data into batches
     x_batches, y_batches = np.split(x_train, number_of_batches), np.split(y_train, number_of_batches)
-    x_y_batches = zip(x_batches, y_batches)
+
     #  find optimal vector of parameters - w
     for i in range(epochs):
-        for x, y in x_y_batches:
+        for x, y in zip(x_batches, y_batches):
             fun_value, fun_grad = obj_fun(w, x, y)
             w = w - eta * fun_grad
         epoch_log_value, _ = obj_fun(w, x_train, y_train)
