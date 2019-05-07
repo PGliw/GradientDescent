@@ -37,7 +37,7 @@ def logistic_cost_function(w, x_train, y_train):
     # calculate logarithm of likelihood
     ln_p_D_w = np.log(p_D_w)
     # calculate objective function
-    L_w = -ln_p_D_w/N
+    L_w = -ln_p_D_w / N
     # calculate gradient of objective function (lecture 4)
     grad_L_w = -(np.transpose(x_train) @ (y_train - sigmas)) / N
     return L_w, grad_L_w
@@ -59,7 +59,21 @@ def gradient_descent(obj_fun, w0, epochs, eta):
         punkt *w*, a *log_values* to lista wartości funkcji celu w każdej
         epoce (lista o długości *epochs*)
     """
-    pass
+    w = w0  # initial point w for objective function L
+    log_values = []  # list of values of cost function for each epoch
+    #  find optimal vector of parameters - w
+    for k in range(epochs):
+        fun_value, fun_grad = obj_fun(w)
+        if k > 0:  # omit initial fun value ( for w0 )
+            log_values.append(fun_value)
+        w = w - eta * fun_grad  # calculate next w
+
+    # calculate fun value for optimal w
+    last_fun_value, _ = obj_fun(w)
+
+    log_values.append(last_fun_value)
+    # del log_values[0]
+    return w, log_values
 
 
 def stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta, mini_batch):
