@@ -135,8 +135,9 @@ def prediction(x, w, theta):
     :param theta: próg klasyfikacji z przedziału [0,1]
     :return: wektor predykowanych etykiet ze zbioru {0, 1} Nx1
     """
-    pass
-
+    sigmas = sigmoid(x @ w)
+    ys = sigmas > theta  # nice python syntax
+    return ys
 
 def f_measure(y_true, y_pred):
     """
