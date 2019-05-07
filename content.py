@@ -110,6 +110,7 @@ def stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta, mini
         log_values.append(epoch_log_value)
     return w, log_values
 
+
 def regularized_logistic_cost_function(w, x_train, y_train, regularization_lambda):
     """
     Wylicz wartość funkcji logistycznej z regularyzacją l2 oraz jej gradient
@@ -139,7 +140,8 @@ def prediction(x, w, theta):
     ys = sigmas > theta  # nice python syntax
     return ys
 
-def f_measure(y_true, y_pred):
+
+def f_measure(y_true, y_pred):  # to count false positives and false negatives
     """
     Wylicz wartość miary F (F-measure) dla zadanych rzeczywistych etykiet
     *y_true* i odpowiadających im predykowanych etykiet *y_pred*.
@@ -148,7 +150,11 @@ def f_measure(y_true, y_pred):
     :param y_pred: wektor etykiet predykowanych przed model Nx1
     :return: wartość miary F (F-measure)
     """
-    pass
+    true_positives = np.sum([y_true[n] == 1 and y_pred[n] == 1 for n in range(len(y_true))])
+    false_positives = np.sum([y_true[n] == 0 and y_pred[n] == 1 for n in range(len(y_true))])
+    false_negatives = np.sum([y_true[n] == 1 and y_pred[n] == 0 for n in range(len(y_true))])
+    result = 2 * true_positives / (2 * true_positives + false_negatives + false_positives)
+    return result
 
 
 def model_selection(x_train, y_train, x_val, y_val, w0, epochs, eta, mini_batch, lambdas, thetas):
