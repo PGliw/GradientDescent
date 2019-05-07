@@ -72,7 +72,6 @@ def gradient_descent(obj_fun, w0, epochs, eta):
     last_fun_value, _ = obj_fun(w)
 
     log_values.append(last_fun_value)
-    # del log_values[0]
     return w, log_values
 
 
@@ -96,8 +95,20 @@ def stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta, mini
         punkt *w*, a *log_values* to lista wartości funkcji celu dla całego
         zbioru treningowego w każdej epoce (lista o długości *epochs*)
     """
-    pass
-
+    w = w0  # initial point w for objective function L
+    log_values = []  # list of values of cost function for each epoch
+    number_of_batches = int(y_train.shape[0] / mini_batch)
+    # split training data into batches
+    x_batches, y_batches = np.split(x_train, number_of_batches), np.split(y_train, number_of_batches)
+    x_y_batches = zip(x_batches, y_batches)
+    #  find optimal vector of parameters - w
+    for i in range(epochs):
+        for x, y in x_y_batches:
+            fun_value, fun_grad = obj_fun(w, x, y)
+            w = w - eta * fun_grad
+        epoch_log_value, _ = obj_fun(w, x_train, y_train)
+        log_values.append(epoch_log_value)
+    return w, log_values
 
 def regularized_logistic_cost_function(w, x_train, y_train, regularization_lambda):
     """
