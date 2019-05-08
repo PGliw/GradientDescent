@@ -182,4 +182,18 @@ def model_selection(x_train, y_train, x_val, y_val, w0, epochs, eta, mini_batch,
         *w* to parametry najlepszego modelu, a *F* to macierz wartości miary F
         dla wszystkich par *(lambda, theta)* #lambda x #theta
     """
-    pass
+    F = []  # matrix of f measures for each pair (lambda, theta)
+    parameters_list = []
+    for lamb in lambdas:
+        w, log_values = stochastic_gradient_descent(lambda w, x, y: regularized_logistic_cost_function(w, x, y, lamb), x_train, y_train, w0, epochs, eta, mini_batch)
+        F_lamb = []
+        for theta in thetas:
+            y_pred = prediction(x_val, w, theta)
+            f_lamb_t = f_measure(y_val, y_pred)
+            parameters_list.append((lamb, theta, w))
+            F_lamb.append(f_lamb_t)
+        F.append(F_lamb)
+
+    best_F_index = int(np.argmax(F))
+    regularization_lambda, theta, w = parameters_list[best_F_index]
+    return regularization_lambda, theta, w, F
